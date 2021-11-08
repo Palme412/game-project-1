@@ -1,4 +1,4 @@
-# game-project-1
+# sunflower-dash
 Project One Game
 "Sunflower Dash"
 
