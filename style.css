@@ -16,11 +16,8 @@ body  {
 }
 
 canvas {
-    background-color: yellow;
-    width: 95%;
-    height: 100%;
-}
-
-#game-container {
-    
+    width: 1200px;
+    height: 600px;
+    border: 1px solid black;
+    background: yellow;
 }
