@@ -105,21 +105,17 @@ function drawFrame(frameX, frameY, canvasX, canvasY) {
     let hasMoved = false;
 
     if (keyPresses.w) {
-      positionY -= movement_Speed;
-      currentDirection = facingUp;
+      moveCharacter(0, -movement_Speed, facingUp);
       hasMoved = true;
     } else if (keyPresses.s) {
-      positionY += movement_Speed;
-      currentDirection = facingDown;
+      moveCharacter(0, movement_Speed, facingDown)
       hasMoved = true;
     }
     if (keyPresses.a) {
-      positionX -= movement_Speed;
-      currentDirection = facingLeft;
+      moveCharacter(-movement_Speed, 0, facingLeft);
       hasMoved = true;
     } else if (keyPresses.d) {
-      positionX += movement_Speed;
-      currentDirection = facingRight;
+      moveCharacter(movement_Speed, 0, facingRight);
       hasMoved = true;
     }
     if (hasMoved) {
