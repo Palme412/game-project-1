@@ -2,17 +2,25 @@ var canvas = document.querySelector("#game"),
     ctx = canvas.getContext("2d"),
     width = 1000,
     height = 600,
-    playerwidth = 30,
-    playerheight = 30,
+    playerwidth = 20,
+    playerheight = 20,
     player = {
-        x: width / 2 - (playerwidth / 2),
-        y: height - 80,
+        x: 10,
+        y: 590,
         width: playerwidth,
         height: playerheight,
         color: "red",
         speed: 3,
-    },
-    boxes = [];
+        velocityX: 0,
+        velocityY: 0,
+        jump: false,
+        grounded: false
+    };
+
+boxes = [];
+keys = [];
+friction = 0.8;
+gravity = 0.2;
 
 boxes.push({
     x: 0,
@@ -38,7 +46,7 @@ boxes.push({
     y: 0,
     width: width,
     height: 5
-})
+});
 
 boxes.push({
     x: 90,
@@ -125,9 +133,9 @@ boxes.push({
     height: 5
 });
 boxes.push({
-    x: 995,
+    x: 945,
     y: 80,
-    width: -50,
+    width: 50,
     height: 5
 });
 boxes.push({
@@ -137,9 +145,9 @@ boxes.push({
     height: 5
 });
 boxes.push({
-    x: 995,
+    x: 595,
     y: 300,
-    width: -400,
+    width: 395,
     height: 5
 });
 boxes.push({
@@ -161,9 +169,9 @@ boxes.push({
     height: 5
 });
 boxes.push({
-    x: 995,
+    x: 895,
     y: 370,
-    width: -100,
+    width: 100,
     height: 5
 });
 boxes.push({
@@ -176,37 +184,121 @@ boxes.push({
     x: 400,
     y: 595,
     width: 5,
-    height: -95
+    height: 95
 });
 boxes.push({
     x: 500,
     y: 595,
     width: 5,
-    height: -100
+    height: 100
 });
 boxes.push({
-    x: 405,
-    y: 570,
-    width: 20,
+    x: 25,
+    y: 150,
+    width: 5,
     height: 5
-});
-boxes.push({
-    x: 500,
-    y: 540,
-    width: -20,
-    height: 5
-});
-boxes.push({
-    x: 405,
-    y: 500,
-    width: 40,
-    height: 5
-});
+})
 
 canvas.width = width;
 canvas.height = height;
 
-for (var i = 0; i < boxes.length; i++) {
-    ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+
+
+function gamePlay() {
+    if (keys[87]) {
+        if (!player.jump && player.grounded) {
+            player.jump = true;
+            player.grounded = false;
+            player.velocityY = -player.speed * 2;
+        }
+    }
+    if (keys[68]) {
+        if (player.velocityX < player.speed) {
+            player.velocityX++;
+        }
+    }
+    if (keys[65]) {
+        if (player.velocityX > -player.speed) {
+            player.velocityX--;
+        }
+    }
+
+    player.velocityX *= friction;
+    player.velocityY += gravity;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    player.grounded = false;
+
+    for (var i = 0; i < boxes.length; i++) {
+        ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+        ctx.fill();
+        var dir = collisionCheck(player, boxes[i]);
+
+        if (dir === "left" || dir === "right") {
+            player.velocityX = 0;
+            player.jump = false;
+        } else if (dir === "bottom") {
+            player.grounded = true;
+            player.jump = false;
+        } else if (dir === "top") {
+            player.velocityY *= -1;
+        }
+    }
+
+    if (player.grounded) {
+        player.velocityY = 0;
+    }
+
+    player.x += player.velocityX;
+    player.y += player.velocityY;
+
     ctx.fill();
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    requestAnimationFrame(gamePlay);
 }
+function collisionCheck(shapeA, shapeB) {
+    var vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
+        vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
+        halfWidth = (shapeA.width / 2) + (shapeB.width / 2),
+        halfHeight = (shapeA.height / 2) + (shapeB.height / 2),
+        collisionDirection = null;
+
+    if (Math.abs(vX) < halfWidth && Math.abs(vY) < halfHeight) {
+        var boxBottomTop = halfWidth - Math.abs(vX),
+            boxSides = halfHeight - Math.abs(vY);
+        if (boxBottomTop >= boxSides) {
+            if (vY > 0) {
+                collisionDirection = "top";
+                shapeA.y += boxSides;
+            } else {
+                collisionDirection = "bottom";
+                shapeA.y -= boxSides;
+            }
+        } else {
+            if (vX > 0) {
+                collisionDirection = "left";
+                shapeA.x += boxBottomTop;
+            } else {
+                collisionDirection = "right";
+                shapeA.x -= boxBottomTop;
+            }
+        }
+    }
+
+    return collisionDirection;
+};
+
+document.body.addEventListener("keydown", function (e) {
+    keys[e.keyCode] = true;
+});
+
+document.body.addEventListener("keyup", function (e) {
+    keys[e.keyCode] = false;
+});
+
+gamePlay();
+collisionCheck();
