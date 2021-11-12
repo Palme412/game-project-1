@@ -67,7 +67,7 @@ boxes.push({
     height: 5
 });
 boxes.push({
-    x: 10,
+    x: 0,
     y: 340,
     width: 240,
     height: 5
@@ -145,9 +145,9 @@ boxes.push({
     height: 5
 });
 boxes.push({
-    x: 595,
+    x: 600,
     y: 300,
-    width: 395,
+    width: 400,
     height: 5
 });
 boxes.push({
@@ -261,6 +261,8 @@ function gamePlay() {
     requestAnimationFrame(gamePlay);
 }
 function collisionCheck(shapeA, shapeB) {
+    x = width;
+    y = height;
     var vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
         vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
         halfWidth = (shapeA.width / 2) + (shapeB.width / 2),
