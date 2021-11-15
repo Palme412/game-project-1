@@ -253,8 +253,7 @@ items.push({
     y: 60,
     width: 10,
     height: 10,
-    effect: "not win",
-    color: "yellow"
+    effect: "not win"
 })
 items.push({
     x: 800,
@@ -355,8 +354,9 @@ function gamePlay() {
     player.y += player.velocityY;
 
     ctx.fill();
-    ctx.fillRect(player.x, player.y, player.width, player.height);
     ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+    
 
     requestAnimationFrame(gamePlay);
 }
