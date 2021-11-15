@@ -1,3 +1,5 @@
+// ========= Variables ======== //
+
 var canvas = document.querySelector("#game"),
     ctx = canvas.getContext("2d"),
     width = 1000,
@@ -17,11 +19,16 @@ var canvas = document.querySelector("#game"),
         grounded: false
     };
 
+var score = 0;
 boxes = [];
 keys = [];
 friction = 0.8;
 gravity = 0.2;
+items = [];
 
+
+
+// ======== Level walls and platforms ======// 
 boxes.push({
     x: 0,
     y: 0, //border
@@ -191,18 +198,86 @@ boxes.push({
     y: 595,
     width: 5,
     height: 100
-});
+}); 
 boxes.push({
     x: 25,
     y: 150,
     width: 5,
     height: 5
 })
+items.push({
+    x: 120,
+    y: 490,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 320,
+    y: 390,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 35,
+    y: 35,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 520,
+    y: 70,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 400,
+    y: 180,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 110,
+    y: 185,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 970,
+    y: 60,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 800,
+    y: 280,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 940,
+    y: 350,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 730,
+    y: 460,
+    width: 10,
+    height: 10,
+})
+items.push({
+    x: 950,
+    y: 570,
+    width: 10,
+    height: 10,
+    effect: "win"
+})
+
 
 canvas.width = width;
 canvas.height = height;
 
-
+// ====== game play ======== //
 
 function gamePlay() {
     if (keys[87]) {
@@ -231,11 +306,19 @@ function gamePlay() {
     ctx.beginPath();
     player.grounded = false;
 
-    for (var i = 0; i < boxes.length; i++) {
+    for (var s = 0; s < items.length; s++) { //Draw items
+        ctx.save();
+        ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
+    }
+
+
+
+    for (var i = 0; i < boxes.length; i++) { //Draw platforms and walls
         ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
         ctx.fill();
         var dir = collisionCheck(player, boxes[i]);
 
+    
         if (dir === "left" || dir === "right") {
             player.velocityX = 0;
             player.jump = false;
@@ -255,25 +338,41 @@ function gamePlay() {
     player.y += player.velocityY;
 
     ctx.fill();
-    ctx.fillStyle = player.color;
+    ctx.fillStyle = player.color; //Draw Player
     ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    
 
     requestAnimationFrame(gamePlay);
 }
+
+// for (var s = 0; s < items.length; s++) {
+//     ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
+//     ctx.fill();
+//     var dir = collisionCheck(player, items[s]);
+// }
+
+
+
+
+// if (collisionCheck(player, items[s])!==null)
+//         if(items[s].stay!==true)
+//         // items[i].width = 0;
+
+
+
 function collisionCheck(shapeA, shapeB) {
-    x = width;
-    y = height;
-    var vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
-        vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
+    var horizontalBorder = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
+        verticalBorder = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
         halfWidth = (shapeA.width / 2) + (shapeB.width / 2),
         halfHeight = (shapeA.height / 2) + (shapeB.height / 2),
         collisionDirection = null;
 
-    if (Math.abs(vX) < halfWidth && Math.abs(vY) < halfHeight) {
-        var boxBottomTop = halfWidth - Math.abs(vX),
-            boxSides = halfHeight - Math.abs(vY);
+    if (Math.abs(horizontalBorder) < halfWidth && Math.abs(verticalBorder) < halfHeight) {
+        var boxBottomTop = halfWidth - Math.abs(horizontalBorder),
+            boxSides = halfHeight - Math.abs(verticalBorder);
         if (boxBottomTop >= boxSides) {
-            if (vY > 0) {
+            if (verticalBorder > 0) {
                 collisionDirection = "top";
                 shapeA.y += boxSides;
             } else {
@@ -281,7 +380,7 @@ function collisionCheck(shapeA, shapeB) {
                 shapeA.y -= boxSides;
             }
         } else {
-            if (vX > 0) {
+            if (horizontalBorder > 0) {
                 collisionDirection = "left";
                 shapeA.x += boxBottomTop;
             } else {
@@ -293,6 +392,7 @@ function collisionCheck(shapeA, shapeB) {
 
     return collisionDirection;
 };
+
 
 document.body.addEventListener("keydown", function (e) {
     keys[e.keyCode] = true;
