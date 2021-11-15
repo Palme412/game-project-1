@@ -238,7 +238,8 @@ items.push({
     y: 180,
     width: 10,
     height: 10,
-    effect: "not win"
+    effect: "not win",
+    color: "yellow"
 })
 items.push({
     x: 110,
@@ -252,7 +253,8 @@ items.push({
     y: 60,
     width: 10,
     height: 10,
-    effect: "not win"
+    effect: "not win",
+    color: "yellow"
 })
 items.push({
     x: 800,
@@ -273,7 +275,8 @@ items.push({
     y: 460,
     width: 10,
     height: 10,
-    effect: "not win"
+    effect: "not win",
+    color: "yellow"
 })
 items.push({
     x: 950,
@@ -316,23 +319,20 @@ function gamePlay() {
     ctx.beginPath();
     player.grounded = false;
 
-    for (var s = 0; s < items.length; s++) { //Draw items
+    for (var s = 0; s < items.length; s++) {
         ctx.save();
         ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
+        ctx.fill();
 
-        if (collisionCheck(player, items[s])!==null)
-        if (items[s].effect === "win"){
+        if (collisionCheck(player, items[s])!==null) 
+            if(items[s].effect === "win"){
             var r = confirm("You Win!");
-            if ( r == false) {
-                player.x = 200;
-                player.y = 200;
-            }
-        }
     }
+}
 
 
 
-    for (var i = 0; i < boxes.length; i++) { //Draw platforms and walls
+    for (var i = 0; i < boxes.length; i++) { 
         ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
         ctx.fill();
         var dir = collisionCheck(player, boxes[i]);
@@ -357,10 +357,9 @@ function gamePlay() {
     player.y += player.velocityY;
 
     ctx.fill();
-    ctx.fillStyle = player.color; //Draw Player
+    ctx.fillStyle = player.color;
     ctx.fillRect(player.x, player.y, player.width, player.height);
 
-    
 
     requestAnimationFrame(gamePlay);
 }
@@ -409,4 +408,3 @@ document.body.addEventListener("keyup", function (e) {
 });
 
 gamePlay();
-// collisionCheck(shapeA, shapeB);
