@@ -210,60 +210,70 @@ items.push({
     y: 490,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 320,
     y: 390,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 35,
     y: 35,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 520,
     y: 70,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 400,
     y: 180,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 110,
     y: 185,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 970,
     y: 60,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 800,
     y: 280,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 940,
     y: 350,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 730,
     y: 460,
     width: 10,
     height: 10,
+    effect: "not win"
 })
 items.push({
     x: 950,
@@ -309,6 +319,15 @@ function gamePlay() {
     for (var s = 0; s < items.length; s++) { //Draw items
         ctx.save();
         ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
+
+        if (collisionCheck(player, items[s])!==null)
+        if (items[s].effect === "win"){
+            var r = confirm("You Win!");
+            if ( r == false) {
+                player.x = 200;
+                player.y = 200;
+            }
+        }
     }
 
 
@@ -345,19 +364,6 @@ function gamePlay() {
 
     requestAnimationFrame(gamePlay);
 }
-
-// for (var s = 0; s < items.length; s++) {
-//     ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
-//     ctx.fill();
-//     var dir = collisionCheck(player, items[s]);
-// }
-
-
-
-
-// if (collisionCheck(player, items[s])!==null)
-//         if(items[s].stay!==true)
-//         // items[i].width = 0;
 
 
 
@@ -403,4 +409,4 @@ document.body.addEventListener("keyup", function (e) {
 });
 
 gamePlay();
-collisionCheck();
+// collisionCheck(shapeA, shapeB);
