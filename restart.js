@@ -198,7 +198,7 @@ boxes.push({
     y: 595,
     width: 5,
     height: 100
-}); 
+});
 boxes.push({
     x: 25,
     y: 150,
@@ -275,8 +275,7 @@ items.push({
     y: 460,
     width: 10,
     height: 10,
-    effect: "not win",
-    color: "yellow"
+    effect: "not win"
 })
 items.push({
     x: 950,
@@ -324,20 +323,19 @@ function gamePlay() {
         ctx.rect(items[s].x, items[s].y, items[s].width, items[s].height);
         ctx.fill();
 
-        if (collisionCheck(player, items[s])!==null) 
-            if(items[s].effect === "win"){
-            var r = confirm("You Win!");
+        if (collisionCheck(player, items[s]) !== null)
+            if (items[s].effect === "win") {
+                var r = confirm("You Win!");
+            }
     }
-}
 
 
-
-    for (var i = 0; i < boxes.length; i++) { 
+    for (var i = 0; i < boxes.length; i++) {
         ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
         ctx.fill();
         var dir = collisionCheck(player, boxes[i]);
 
-    
+
         if (dir === "left" || dir === "right") {
             player.velocityX = 0;
             player.jump = false;
@@ -357,9 +355,8 @@ function gamePlay() {
     player.y += player.velocityY;
 
     ctx.fill();
-    ctx.fillStyle = player.color;
     ctx.fillRect(player.x, player.y, player.width, player.height);
-
+    ctx.fillStyle = player.color;
 
     requestAnimationFrame(gamePlay);
 }
@@ -395,6 +392,9 @@ function collisionCheck(shapeA, shapeB) {
         }
     }
 
+    // compare x,y player position to items through boolean
+    //  use boolean to hide element individually
+    // if statement to check
     return collisionDirection;
 };
 
