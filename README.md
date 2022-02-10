@@ -5,6 +5,7 @@ Project One Game
 # Deployed Link
 https://palme412.github.io/sunflower-dash/
 
+# Game Information
 WASD Movement. W to jump, A and D move left and right.
 The objective of this game is to collect sunflowers and avoid the dog, Sven. Try to collect all
 of the sunflowers on the level! If you touch the dog, it is a restart back to the beginning!
